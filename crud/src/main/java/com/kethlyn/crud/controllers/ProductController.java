@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -21,8 +22,8 @@ public class ProductController {
     private ProductRepository productRepository;
 
     @GetMapping
-    public ResponseEntity getAllProduct() {
-        var allProducts = productRepository.findAllByActiveTrue();
+    public ResponseEntity<List<Product>> getAllProduct() {
+        List<Product> allProducts = productRepository.findAllByActiveTrue();
         return ResponseEntity.ok(allProducts);
     }
 
@@ -54,9 +55,9 @@ public class ProductController {
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity deleteProduct(@PathVariable String id) {
-        Optional<Product> optionalProductproduct = productRepository.findById(id);
-        if (optionalProductproduct.isPresent()) {
-            Product product = optionalProductproduct.get();
+        Optional<Product> optionalProduct = productRepository.findById(id);
+        if (optionalProduct.isPresent()) {
+            Product product = optionalProduct.get();
             product.setActive(false);
 
             return ResponseEntity.noContent().build();
