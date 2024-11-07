@@ -24,7 +24,7 @@ public class Product {
 
     private Boolean active;
 
-    public Product(RequestProduct requestProduct){
+    public Product(ProductRequest requestProduct){
         this.name = requestProduct.name();
         this.price = requestProduct.price();
         this.active = true;

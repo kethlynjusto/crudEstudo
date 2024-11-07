@@ -1,0 +1,6 @@
+CREATE TABLE client(
+    id TEXT PRIMARY KEY UNIQUE NOT NULL,
+    name VARCHAR(200) NOT NULL,
+    email VARCHAR(150) NOT NULL UNIQUE,
+    telefone VARCHAR(50)
+)

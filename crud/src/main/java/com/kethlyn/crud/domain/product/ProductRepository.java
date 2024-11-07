@@ -11,7 +11,7 @@ como salvar, buscar, atualizar e excluir objetos de domínio em um banco de dado
 public interface ProductRepository extends JpaRepository<Product, String> {
                                                    //primary key, tipo que ela é
 
-                     //seguindo padrão Jpa, vc não precisa criar o corpo, ele já consegue definir por vc.
+                     //seguindo padrão Jpa, vc não precisa criar o corpo, ele já consegue definir por vc.A
         List<Product> findAllByActiveTrue();
 }
 //metodos como: findById, findAll, deleteAll, deleteById.

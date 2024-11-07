@@ -3,7 +3,8 @@ package com.kethlyn.crud.controllers;
 
 import com.kethlyn.crud.domain.product.Product;
 import com.kethlyn.crud.domain.product.ProductRepository;
-import com.kethlyn.crud.domain.product.RequestProduct;
+import com.kethlyn.crud.domain.product.ProductRequest;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,14 +27,14 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity addProduct(@RequestBody @Valid RequestProduct data) {
+    public ResponseEntity addProduct(@RequestBody @Valid ProductRequest data) {
         Product product = new Product(data);
         productRepository.save(product);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateProduct(@PathVariable String id, @RequestBody @Valid RequestProduct data) {
+    public ResponseEntity updateProduct(@PathVariable String id, @RequestBody @Valid ProductRequest data) {
         Optional<Product> optionalProduct = productRepository.findById(id);
 
         if (optionalProduct.isPresent()) {
@@ -46,7 +47,7 @@ public class ProductController {
             return ResponseEntity.ok(product);
         } else {
             // Produto não encontrado, tratar o caso de erro
-            return ResponseEntity.notFound().build();
+            throw new EntityNotFoundException();
         }
     }
 
@@ -60,7 +61,7 @@ public class ProductController {
 
             return ResponseEntity.noContent().build();
         } else {
-            return ResponseEntity.notFound().build();
+            throw new EntityNotFoundException();
         }
     }
 }
