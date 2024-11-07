@@ -7,6 +7,7 @@ import com.kethlyn.crud.domain.product.RequestProduct;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -19,23 +20,23 @@ public class ProductController {
     private ProductRepository productRepository;
 
     @GetMapping
-    public ResponseEntity getAllProduct(){
-        var allProducts = productRepository.findAll();
+    public ResponseEntity getAllProduct() {
+        var allProducts = productRepository.findAllByActiveTrue();
         return ResponseEntity.ok(allProducts);
     }
 
     @PostMapping
-    public ResponseEntity addProduct(@RequestBody @Valid RequestProduct data){
+    public ResponseEntity addProduct(@RequestBody @Valid RequestProduct data) {
         Product product = new Product(data);
         productRepository.save(product);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateProduct(@PathVariable String id, @RequestBody @Valid RequestProduct data){
+    public ResponseEntity updateProduct(@PathVariable String id, @RequestBody @Valid RequestProduct data) {
         Optional<Product> optionalProduct = productRepository.findById(id);
 
-        if(optionalProduct.isPresent()){
+        if (optionalProduct.isPresent()) {
             Product product = optionalProduct.get();
             product.setPrice(data.price());
             product.setName(data.name());
@@ -47,14 +48,16 @@ public class ProductController {
             // Produto não encontrado, tratar o caso de erro
             return ResponseEntity.notFound().build();
         }
-
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteProduct(@PathVariable String id, @RequestBody @Valid RequestProduct data){
-        Optional<Product> product = productRepository.findById(id);
-        if(product.isPresent()){
-            productRepository.delete(product.get());
+    @Transactional
+    public ResponseEntity deleteProduct(@PathVariable String id) {
+        Optional<Product> optionalProductproduct = productRepository.findById(id);
+        if (optionalProductproduct.isPresent()) {
+            Product product = optionalProductproduct.get();
+            product.setActive(false);
+
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();
